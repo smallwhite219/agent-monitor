@@ -49,3 +49,19 @@ export const rotateApiKey = () => {
         return false;
     }
 };
+
+// ── GAS Deploy URL ────────────────────────────
+
+const DEFAULT_GAS_URL = "https://script.google.com/macros/s/AKfycbx9m2P0QZDx-dZSrn0x6R0BL6itWYszwjZYCYe49PWf6N6UefXUWYZ3cjhCgOTDxYuSXw/exec";
+
+export const getGasUrl = () => {
+    return localStorage.getItem('gas_api_url') || DEFAULT_GAS_URL;
+};
+
+export const saveGasUrl = (url) => {
+    if (url && url.trim()) {
+        localStorage.setItem('gas_api_url', url.trim());
+    } else {
+        localStorage.removeItem('gas_api_url');
+    }
+};

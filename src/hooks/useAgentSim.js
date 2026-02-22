@@ -1,7 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { getActiveApiKey, rotateApiKey } from '../utils/apiKeys';
-
-export const GAS_API_URL = "https://script.google.com/macros/s/AKfycbx9m2P0QZDx-dZSrn0x6R0BL6itWYszwjZYCYe49PWf6N6UefXUWYZ3cjhCgOTDxYuSXw/exec";
+import { getActiveApiKey, rotateApiKey, getGasUrl } from '../utils/apiKeys';
 
 const INITIAL_AGENTS = [
     { id: 'dev', name: 'Developer', role: 'Engineering', avatar: '/dev.png', status: 'thinking', progress: 0, lastEvent: 'Connecting to DB...', log: [] },
@@ -48,7 +46,7 @@ export const useAgentSim = () => {
 
         const fetchData = async () => {
             try {
-                const response = await fetch(GAS_API_URL);
+                const response = await fetch(getGasUrl());
                 if (!response.ok) throw new Error('API request failed');
 
                 const data = await response.json();
@@ -132,7 +130,7 @@ export const useAgentSim = () => {
                 try {
                     const apiKey = getActiveApiKey();
                     if (apiKey) {
-                        const response = await fetch(GAS_API_URL, {
+                        const response = await fetch(getGasUrl(), {
                             method: 'POST',
                             headers: { 'Content-Type': 'text/plain;charset=utf-8' },
                             body: JSON.stringify({ action: 'NEXT_TURN', apiKey: apiKey })

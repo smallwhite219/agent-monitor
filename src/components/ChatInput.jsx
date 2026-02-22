@@ -1,19 +1,22 @@
 import { useState, useEffect } from 'react';
-import { Send, Key, Eye, EyeOff } from 'lucide-react';
-import { getRawApiKeys, saveApiKeys } from '../utils/apiKeys';
+import { Send, Key, Eye, EyeOff, Link2 } from 'lucide-react';
+import { getRawApiKeys, saveApiKeys, getGasUrl, saveGasUrl } from '../utils/apiKeys';
 
 export const ChatInput = ({ onSendMessage, disabled, compact, settingsOnly }) => {
     const [message, setMessage] = useState('');
     const [apiKey, setApiKey] = useState('');
+    const [gasUrl, setGasUrl] = useState('');
     const [showKey, setShowKey] = useState(false);
 
     useEffect(() => {
         const saved = getRawApiKeys();
         if (saved) setApiKey(saved);
+        setGasUrl(getGasUrl());
     }, []);
 
-    const handleSaveKey = () => {
+    const handleSave = () => {
         saveApiKeys(apiKey);
+        saveGasUrl(gasUrl);
     };
 
     const handleSubmit = (e) => {
@@ -24,16 +27,36 @@ export const ChatInput = ({ onSendMessage, disabled, compact, settingsOnly }) =>
         }
     };
 
+    const isConfigured = getRawApiKeys() && getGasUrl();
+
     // Settings-only mode (for the side panel)
     if (settingsOnly) {
         return (
             <div className="settings-content">
-                <h3 style={{ fontSize: '1rem', margin: '0 0 1rem 0', color: '#e4e4e7' }}>
-                    <Key size={14} style={{ marginRight: '6px' }} />
-                    API Key Settings
+                {/* GAS URL */}
+                <h3 style={{ fontSize: '0.95rem', margin: '0 0 0.6rem 0', color: '#e4e4e7', display: 'flex', alignItems: 'center' }}>
+                    <Link2 size={14} style={{ marginRight: '6px' }} />
+                    GAS Deploy URL
                 </h3>
-                <div style={{ fontSize: '0.75rem', color: '#71717A', marginBottom: '0.75rem' }}>
-                    Stored locally only. 可用逗號分隔輸入多組 Key 自動輪替。
+                <div style={{ fontSize: '0.7rem', color: '#71717A', marginBottom: '0.5rem' }}>
+                    貼上你自己部署的 Google Apps Script 網址。
+                </div>
+                <input
+                    type="text"
+                    value={gasUrl}
+                    onChange={(e) => setGasUrl(e.target.value)}
+                    placeholder="https://script.google.com/macros/s/.../exec"
+                    className="settings-input"
+                    style={{ marginBottom: '1rem', fontSize: '0.7rem' }}
+                />
+
+                {/* API Key */}
+                <h3 style={{ fontSize: '0.95rem', margin: '0 0 0.6rem 0', color: '#e4e4e7', display: 'flex', alignItems: 'center' }}>
+                    <Key size={14} style={{ marginRight: '6px' }} />
+                    Gemini API Key
+                </h3>
+                <div style={{ fontSize: '0.7rem', color: '#71717A', marginBottom: '0.5rem' }}>
+                    可用逗號分隔輸入多組 Key 自動輪替。資料只存在你的瀏覽器。
                 </div>
                 <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '0.75rem' }}>
                     <div style={{ position: 'relative', flex: 1 }}>
@@ -51,8 +74,13 @@ export const ChatInput = ({ onSendMessage, disabled, compact, settingsOnly }) =>
                             {showKey ? <EyeOff size={14} /> : <Eye size={14} />}
                         </button>
                     </div>
-                    <button onClick={handleSaveKey} className="save-btn">Save</button>
                 </div>
+
+                {/* Single save button for both */}
+                <button onClick={handleSave} className="save-btn" style={{ width: '100%', padding: '0.5rem', marginBottom: '0.5rem' }}>
+                    Save All
+                </button>
+
                 {getRawApiKeys() && (
                     <div style={{ fontSize: '0.7rem', color: '#34d399' }}>
                         ✓ {getRawApiKeys().split(',').filter(Boolean).length} key(s) saved
@@ -70,17 +98,17 @@ export const ChatInput = ({ onSendMessage, disabled, compact, settingsOnly }) =>
                     type="text"
                     value={message}
                     onChange={(e) => setMessage(e.target.value)}
-                    placeholder={getRawApiKeys() ? "輸入指令給 AI 團隊..." : "請先設定 API Key (右上角齒輪)"}
-                    disabled={disabled || !getRawApiKeys()}
+                    placeholder={isConfigured ? "輸入指令給 AI 團隊..." : "請先設定 GAS URL 與 API Key (⚙️)"}
+                    disabled={disabled || !isConfigured}
                     className="compact-input-field"
                 />
                 <button
                     type="submit"
-                    disabled={!message.trim() || disabled || !getRawApiKeys()}
+                    disabled={!message.trim() || disabled || !isConfigured}
                     className="compact-send-btn"
                     style={{
-                        background: message.trim() && getRawApiKeys() ? 'linear-gradient(135deg, #f43f5e, #fbbf24)' : 'rgba(255,255,255,0.1)',
-                        color: message.trim() && getRawApiKeys() ? '#18181b' : '#71717A',
+                        background: message.trim() && isConfigured ? 'linear-gradient(135deg, #f43f5e, #fbbf24)' : 'rgba(255,255,255,0.1)',
+                        color: message.trim() && isConfigured ? '#18181b' : '#71717A',
                     }}
                 >
                     <Send size={18} />

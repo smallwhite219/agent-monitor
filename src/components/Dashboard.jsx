@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useAgentSim, GAS_API_URL } from '../hooks/useAgentSim';
+import { useAgentSim } from '../hooks/useAgentSim';
 import { EventTimeline } from './EventTimeline';
 import { PixelOffice } from './PixelOffice';
 import { ChatInput } from './ChatInput';
@@ -7,7 +7,7 @@ import { HiringPanel } from './HiringPanel';
 import { FinalReview } from './FinalReview';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Activity, Brain, CheckCircle, Pause, Play, Trash2, Loader, MessageSquare, Settings } from 'lucide-react';
-import { getActiveApiKey, rotateApiKey, getRawApiKeys } from '../utils/apiKeys';
+import { getActiveApiKey, rotateApiKey, getRawApiKeys, getGasUrl } from '../utils/apiKeys';
 
 export const Dashboard = () => {
     const { systemState, proposal, agents, stats, globalEvents, activeLinks, isPaused, togglePause, clearHistory, setSystemState, setProposal } = useAgentSim();
@@ -20,7 +20,7 @@ export const Dashboard = () => {
         if (!apiKey) { alert("API Key 遺失，請重新設定。"); return; }
         setIsSending(true);
         try {
-            const response = await fetch(GAS_API_URL, {
+            const response = await fetch(getGasUrl(), {
                 method: 'POST',
                 headers: { 'Content-Type': 'text/plain;charset=utf-8' },
                 body: JSON.stringify({ action: 'APPROVE_HIRING', proposal, apiKey })
@@ -34,7 +34,7 @@ export const Dashboard = () => {
     const handleReject = async () => {
         setIsSending(true);
         try {
-            const response = await fetch(GAS_API_URL, {
+            const response = await fetch(getGasUrl(), {
                 method: 'POST',
                 headers: { 'Content-Type': 'text/plain;charset=utf-8' },
                 body: JSON.stringify({ action: 'REJECT_HIRING', apiKey: getActiveApiKey() || '' })
@@ -50,7 +50,7 @@ export const Dashboard = () => {
         if (!apiKey) return;
         setIsSending(true);
         try {
-            await fetch(GAS_API_URL, {
+            await fetch(getGasUrl(), {
                 method: 'POST',
                 headers: { 'Content-Type': 'text/plain;charset=utf-8' },
                 body: JSON.stringify({ action: 'RESET_SYSTEM', apiKey })
@@ -77,7 +77,7 @@ export const Dashboard = () => {
 
         while (!success && retries < maxRetries) {
             try {
-                const response = await fetch(GAS_API_URL, {
+                const response = await fetch(getGasUrl(), {
                     method: 'POST',
                     headers: { 'Content-Type': 'text/plain;charset=utf-8' },
                     body: JSON.stringify({ action: 'START_PLANNING', instruction: message, apiKey: currentApiKey })
