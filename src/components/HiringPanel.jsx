@@ -1,5 +1,6 @@
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { fixAvatar } from '../utils/fixAvatar';
 
 export const HiringPanel = ({ proposal, onApprove, onReject, isSending }) => {
     if (!proposal) return null;
@@ -41,7 +42,7 @@ export const HiringPanel = ({ proposal, onApprove, onReject, isSending }) => {
                                     className="bg-slate-800/80 border border-white/10 rounded-xl p-4 flex gap-4 hover:border-indigo-500/50 transition-colors"
                                 >
                                     <div className="w-12 h-12 rounded-full overflow-hidden bg-slate-700 flex-shrink-0 border border-white/10">
-                                        <img src={agent.avatar || '/default.png'} alt={agent.name} className="w-full h-full object-cover" />
+                                        <img src={fixAvatar(agent.avatar)} alt={agent.name} className="w-full h-full object-cover" />
                                     </div>
                                     <div className="flex-1 min-w-0">
                                         <div className="flex justify-between items-start mb-1">
@@ -71,8 +72,8 @@ export const HiringPanel = ({ proposal, onApprove, onReject, isSending }) => {
                             onClick={onApprove}
                             disabled={isSending}
                             className={`px-8 py-2.5 rounded-xl font-medium text-white shadow-lg transition-all flex items-center gap-2 ${isSending
-                                    ? 'bg-indigo-500/50 cursor-not-allowed opacity-70'
-                                    : 'bg-gradient-to-r from-indigo-500 to-purple-500 hover:from-indigo-400 hover:to-purple-400 shadow-indigo-500/25 transform hover:scale-105 active:scale-95'
+                                ? 'bg-indigo-500/50 cursor-not-allowed opacity-70'
+                                : 'bg-gradient-to-r from-indigo-500 to-purple-500 hover:from-indigo-400 hover:to-purple-400 shadow-indigo-500/25 transform hover:scale-105 active:scale-95'
                                 }`}
                         >
                             <span>{isSending ? '⏳' : '✨'}</span>

@@ -1,4 +1,5 @@
 import { motion, AnimatePresence } from 'framer-motion';
+import { fixAvatar } from '../utils/fixAvatar';
 
 export const AgentGraph = ({ agents, activeLinks }) => {
     const radius = 80;
@@ -76,7 +77,7 @@ export const AgentGraph = ({ agents, activeLinks }) => {
                     >
                         <div style={{ position: 'relative' }}>
                             <img
-                                src={agent.avatar}
+                                src={fixAvatar(agent.avatar)}
                                 alt={agent.name}
                                 className={agent.status === 'acting' ? 'pulse' : ''}
                                 style={{

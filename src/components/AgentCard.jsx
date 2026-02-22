@@ -1,4 +1,5 @@
 import { motion, AnimatePresence } from 'framer-motion';
+import { fixAvatar } from '../utils/fixAvatar';
 
 export const AgentCard = ({ agent }) => {
     return (
@@ -11,7 +12,7 @@ export const AgentCard = ({ agent }) => {
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '1rem' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
                     <motion.img
-                        src={agent.avatar}
+                        src={fixAvatar(agent.avatar)}
                         alt={agent.name}
                         className={`avatar ${agent.status === 'acting' ? 'pulse' : ''}`}
                         layoutId={`avatar-${agent.id}`}

@@ -1,4 +1,5 @@
 import { motion, AnimatePresence } from 'framer-motion';
+import { fixAvatar } from '../utils/fixAvatar';
 
 // Color palette by agent name hash
 function nameColor(name) {
@@ -30,7 +31,7 @@ export const EventTimeline = ({ events }) => {
                                 className="chat-bubble-row"
                             >
                                 <img
-                                    src={evt.avatar}
+                                    src={fixAvatar(evt.avatar)}
                                     alt=""
                                     className="chat-avatar"
                                 />
