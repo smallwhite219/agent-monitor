@@ -1,0 +1,381 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  background: linear-gradient(135deg, #0c0a15 0%, #16132b 50%, #0f0d1e 100%);
+  color: #e4e4e7;
+  overflow: hidden;
+  height: 100vh;
+}
+
+#root {
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* ── Full-screen Dashboard ─────────────────────── */
+.dashboard-fullscreen {
+  position: relative;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* ── Pixel Office (fills the viewport) ─────────── */
+.pixel-office-container {
+  position: absolute;
+  inset: 0;
+  bottom: 60px;
+  /* leave room for bottom bar */
+}
+
+.pixel-office-canvas {
+  width: 100%;
+  height: 100%;
+  image-rendering: pixelated;
+}
+
+.pixel-office-canvas canvas {
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+  display: block;
+}
+
+.pixel-office-overlay {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  pointer-events: none;
+}
+
+.pixel-office-badge {
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 0.7rem;
+  color: #a1a1aa;
+  font-family: monospace;
+}
+
+/* stats-overlay and toolbar-overlay removed — now inside bottom-bar */
+
+.stat-pill {
+  background: rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 4px 8px;
+  border-radius: 20px;
+  font-size: 0.7rem;
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.toolbar-btn {
+  position: relative;
+  background: rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: #d4d4d8;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  transition: all 0.2s ease;
+}
+
+.toolbar-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.toolbar-badge {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  background: #f43f5e;
+  color: #fff;
+  font-size: 0.55rem;
+  font-weight: 700;
+  min-width: 16px;
+  height: 16px;
+  line-height: 16px;
+  text-align: center;
+  border-radius: 99px;
+  padding: 0 3px;
+}
+
+/* ── Side panels (chat / settings) ─────────────── */
+.side-panel {
+  position: fixed;
+  bottom: 56px;
+  top: 12px;
+  width: 340px;
+  z-index: 15;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.right-panel {
+  right: 12px;
+}
+
+/* ── Chat Stream (LINE-style) in side panel ────── */
+.chat-stream {
+  background: rgba(0, 0, 0, 0.65) !important;
+  backdrop-filter: blur(16px) !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  border-radius: 12px !important;
+  padding: 1rem 1rem !important;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.chat-messages {
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column-reverse;
+  gap: 0.6rem;
+  padding-right: 4px;
+}
+
+.chat-messages::-webkit-scrollbar {
+  width: 4px;
+}
+
+.chat-messages::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.chat-messages::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 2px;
+}
+
+.chat-bubble-row {
+  display: flex;
+  gap: 0.5rem;
+  align-items: flex-start;
+}
+
+.chat-avatar {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  margin-top: 2px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.chat-bubble-wrapper {
+  flex: 1;
+  min-width: 0;
+}
+
+.chat-meta {
+  display: flex;
+  align-items: baseline;
+  gap: 0.4rem;
+  margin-bottom: 2px;
+}
+
+.chat-time {
+  font-size: 0.6rem;
+  color: #52525b;
+}
+
+.chat-bubble {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 0 10px 10px 10px;
+  padding: 0.35rem 0.6rem;
+  font-size: 0.78rem;
+  line-height: 1.4;
+  color: #d4d4d8;
+  word-break: break-word;
+}
+
+/* ── Settings panel ────────────────────────────── */
+.settings-panel .settings-content {
+  background: rgba(0, 0, 0, 0.65);
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  padding: 1.25rem;
+}
+
+.settings-input {
+  width: 100%;
+  padding: 0.5rem 2rem 0.5rem 0.75rem;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 6px;
+  color: #fff;
+  font-family: monospace;
+  font-size: 0.8rem;
+}
+
+.eye-btn {
+  position: absolute;
+  right: 0.4rem;
+  top: 50%;
+  transform: translateY(-50%);
+  background: transparent;
+  border: none;
+  color: #a1a1aa;
+  cursor: pointer;
+  padding: 0;
+}
+
+.save-btn {
+  background: #3b82f6;
+  color: #fff;
+  border: none;
+  padding: 0 0.75rem;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 0.8rem;
+}
+
+/* ── Fixed bottom input bar ────────────────────── */
+.bottom-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 6px 12px;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(16px);
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  z-index: 25;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.bottom-stats {
+  display: flex;
+  gap: 5px;
+  flex-shrink: 0;
+}
+
+.bottom-input-wrapper {
+  flex: 1;
+  min-width: 0;
+}
+
+.bottom-toolbar {
+  display: flex;
+  gap: 5px;
+  flex-shrink: 0;
+}
+
+.compact-input {
+  display: flex;
+  gap: 8px;
+}
+
+.compact-input-field {
+  flex: 1;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 10px 16px;
+  border-radius: 10px;
+  color: #fff;
+  font-size: 0.9rem;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.compact-input-field:focus {
+  border-color: #fbbf24;
+}
+
+.compact-input-field:disabled {
+  opacity: 0.5;
+}
+
+.compact-send-btn {
+  border: none;
+  border-radius: 10px;
+  padding: 0 16px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+
+.compact-send-btn:disabled {
+  cursor: not-allowed;
+}
+
+/* ── Modal overlay ─────────────────────────────── */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 50;
+  padding: 2rem;
+}
+
+/* ── Glass card (still used by some sub-components) ─ */
+.glass-card {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.03) 0%, rgba(255, 255, 255, 0.01) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 16px;
+  padding: 1.5rem;
+  backdrop-filter: blur(12px);
+}
+
+/* ── Animations ────────────────────────────────── */
+.pulse {
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+
+  50% {
+    transform: scale(1.5);
+    opacity: 0.5;
+  }
+}
+
+.spin {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  100% {
+    transform: rotate(360deg);
+  }
+}
